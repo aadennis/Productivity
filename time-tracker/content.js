@@ -1,18 +1,20 @@
 // Create overlay
 const box = document.createElement("div");
 box.style.position = "fixed";
-box.style.bottom = "20px";
-box.style.right = "20px";
-box.style.padding = "12px 18px";
-box.style.background = "rgba(180, 0, 0, 0.85)";   // stronger deterrent colour
+box.style.top = "50%";
+box.style.left = "50%";
+box.style.transform = "translate(-50%, -50%)";   // perfect centering
+box.style.padding = "20px 28px";
+box.style.background = "rgba(180, 0, 0, 0.85)";
 box.style.color = "white";
-box.style.fontSize = "22px";                     // bigger font
-box.style.fontWeight = "bold";                   // stronger emphasis
-box.style.borderRadius = "6px";
+box.style.fontSize = "28px";                     // big deterrent
+box.style.fontWeight = "bold";
+box.style.borderRadius = "8px";
 box.style.zIndex = "999999";
 box.style.fontFamily = "sans-serif";
 box.style.pointerEvents = "none";
-box.style.boxShadow = "0 0 12px rgba(0,0,0,0.5)";
+box.style.boxShadow = "0 0 20px rgba(0,0,0,0.6)";
+
 
 document.body.appendChild(box);
 
