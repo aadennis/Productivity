@@ -1,0 +1,55 @@
+let activeCategory = null;
+let lastTimestamp = Date.now();
+
+function categoryFromUrl(url) {
+  if (!url) return null;
+  if (url.includes("youtube.com/shorts/")) return "yt_shorts";
+  if (url.includes("facebook.com/marketplace")) return "fb_marketplace";
+  return null;
+}
+
+async function addTime(category, ms) {
+  if (!category) return;
+  const seconds = Math.floor(ms / 1000);
+
+  const data = await chrome.storage.local.get({
+    yt_shorts_seconds: 0,
+    fb_marketplace_seconds: 0
+  });
+
+  const key = category + "_seconds";
+  data[key] += seconds;
+
+  await chrome.storage.local.set({ [key]: data[key] });
+}
+
+async function updateActiveTab() {
+  const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true });
+  const url = tabs[0]?.url || "";
+  const newCategory = categoryFromUrl(url);
+
+  const now = Date.now();
+  const elapsed = now - lastTimestamp;
+
+  if (activeCategory) {
+    await addTime(activeCategory, elapsed);
+  }
+
+  activeCategory = newCategory;
+  lastTimestamp = now;
+}
+
+chrome.tabs.onActivated.addListener(updateActiveTab);
+chrome.tabs.onUpdated.addListener(updateActiveTab);
+
+chrome.idle.onStateChanged.addListener(async (state) => {
+  const now = Date.now();
+  const elapsed = now - lastTimestamp;
+
+  if (state === "active" && activeCategory) {
+    await addTime(activeCategory, elapsed);
+  }
+
+  lastTimestamp = now;
+});
+
