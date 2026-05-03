@@ -1,16 +1,19 @@
 // Create overlay
 const box = document.createElement("div");
 box.style.position = "fixed";
-box.style.bottom = "10px";
-box.style.right = "10px";
-box.style.padding = "6px 10px";
-box.style.background = "rgba(0,0,0,0.7)";
+box.style.bottom = "20px";
+box.style.right = "20px";
+box.style.padding = "12px 18px";
+box.style.background = "rgba(180, 0, 0, 0.85)";   // stronger deterrent colour
 box.style.color = "white";
-box.style.fontSize = "12px";
-box.style.borderRadius = "4px";
+box.style.fontSize = "22px";                     // bigger font
+box.style.fontWeight = "bold";                   // stronger emphasis
+box.style.borderRadius = "6px";
 box.style.zIndex = "999999";
 box.style.fontFamily = "sans-serif";
 box.style.pointerEvents = "none";
+box.style.boxShadow = "0 0 12px rgba(0,0,0,0.5)";
+
 document.body.appendChild(box);
 
 function format(seconds) {
