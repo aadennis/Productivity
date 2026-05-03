@@ -84,14 +84,16 @@ chrome.alarms.onAlarm.addListener(async alarm => {
 chrome.tabs.onActivated.addListener(updateActiveTab);
 chrome.tabs.onUpdated.addListener(updateActiveTab);
 
-chrome.idle.onStateChanged.addListener(async (state) => {
-  const now = Date.now();
-  const elapsed = now - lastTimestamp;
+// macOS Edge: chrome.idle is undefined, so guard it
+if (chrome.idle && chrome.idle.onStateChanged) {
+  chrome.idle.onStateChanged.addListener(async (state) => {
+    const now = Date.now();
+    const elapsed = now - lastTimestamp;
 
-  if (state === "active" && activeCategory) {
-    await addTime(activeCategory, elapsed);
-  }
+    if (state === "active" && activeCategory) {
+      await addTime(activeCategory, elapsed);
+    }
 
-  lastTimestamp = now;
-});
-
+    lastTimestamp = now;
+  });
+}
