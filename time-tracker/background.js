@@ -39,11 +39,10 @@ async function updateActiveTab() {
   lastTimestamp = now;
 }
 
-/* ---------------------------------------------------------
-   MIDNIGHT RESET — correct MV3-safe placement
---------------------------------------------------------- */
+/* -------------------------
+   Midnight Reset (MV3-safe)
+-------------------------- */
 
-// Ensure we have a stored date
 chrome.storage.local.get({ last_date: null }, data => {
   if (!data.last_date) {
     const today = new Date().toISOString().slice(0, 10);
@@ -51,7 +50,6 @@ chrome.storage.local.get({ last_date: null }, data => {
   }
 });
 
-// Create the alarm only when the extension is ready
 chrome.runtime.onInstalled.addListener(() => {
   chrome.alarms.create("checkDate", { periodInMinutes: 1 });
 });
@@ -60,7 +58,6 @@ chrome.runtime.onStartup.addListener(() => {
   chrome.alarms.create("checkDate", { periodInMinutes: 1 });
 });
 
-// Handle the alarm firing
 chrome.alarms.onAlarm.addListener(async alarm => {
   if (alarm.name !== "checkDate") return;
 
@@ -80,9 +77,9 @@ chrome.alarms.onAlarm.addListener(async alarm => {
   }
 });
 
-/* ---------------------------------------------------------
-   EXISTING LISTENERS
---------------------------------------------------------- */
+/* -------------------------
+   Event listeners
+-------------------------- */
 
 chrome.tabs.onActivated.addListener(updateActiveTab);
 chrome.tabs.onUpdated.addListener(updateActiveTab);

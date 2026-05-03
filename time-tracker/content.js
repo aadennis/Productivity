@@ -1,48 +1,36 @@
-// Create overlay
+// Create overlay element
 const box = document.createElement("div");
-box.style.position = "fixed";
-box.style.top = "50%";
-box.style.left = "50%";
-box.style.transform = "translate(-50%, -50%)";   // perfect centering
-box.style.padding = "20px 28px";
-box.style.background = "rgba(180, 0, 0, 0.85)";
-box.style.color = "white";
-box.style.fontSize = "28px";                     // big deterrent
-box.style.fontWeight = "bold";
-box.style.borderRadius = "8px";
-box.style.zIndex = "999999";
-box.style.fontFamily = "sans-serif";
-box.style.pointerEvents = "none";
-box.style.boxShadow = "0 0 20px rgba(0,0,0,0.6)";
-
-
+box.id = "timeTrackerOverlay";
 document.body.appendChild(box);
 
+// Format seconds → HH:MM:SS
 function format(seconds) {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}m ${s}s`;
+  const h = Math.floor(seconds / 3600).toString().padStart(2, "0");
+  const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, "0");
+  const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+  return `${h}:${m}:${s}`;
 }
 
+// Update overlay based on URL + stored time
 function updateOverlay() {
-    chrome.storage.local.get(null).then(data => {
-        let text = "";
+  chrome.storage.local.get(null).then(data => {
+    const url = location.href;
+    let text = "";
 
-        if (location.href.includes("youtube.com/shorts")) {
-            text = "Tracking: YouTube Shorts\n" +
-                format(data.yt_shorts_seconds || 0);
-        } else if (location.href.includes("facebook.com/marketplace")) {
-            text = "Tracking: FB Marketplace\n" +
-                format(data.fb_marketplace_seconds || 0);
-        } else {
-            text = "";
-        }
+    if (url.includes("youtube.com/shorts")) {
+      text = "Tracking: YouTube Shorts\n" +
+             format(data.yt_shorts_seconds || 0);
+    } else if (url.includes("facebook.com/marketplace")) {
+      text = "Tracking: FB Marketplace\n" +
+             format(data.fb_marketplace_seconds || 0);
+    }
 
-        box.textContent = text;
-        box.style.display = text ? "block" : "none";
-    });
+    box.textContent = text;
+    box.style.display = text ? "block" : "none";
+  });
 }
 
-setInterval(updateOverlay, 1000);
+// Update when storage changes or URL changes
+chrome.storage.onChanged.addListener(updateOverlay);
 updateOverlay();
 

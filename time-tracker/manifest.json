@@ -1,23 +1,27 @@
 {
   "manifest_version": 3,
-  "name": "YT Shorts + FB Marketplace Time Tracker",
+  "name": "Time Tracker",
   "version": "1.0",
-  "description": "Tracks time spent on YouTube Shorts and Facebook Marketplace.",
+
   "permissions": [
     "tabs",
     "storage",
-    "idle"
+    "alarms"
   ],
+
   "background": {
     "service_worker": "background.js"
   },
+
   "content_scripts": [
     {
       "matches": [
         "*://www.youtube.com/*",
         "*://www.facebook.com/marketplace/*"
       ],
-      "js": ["content.js"]
+      "js": ["content.js"],
+      "css": ["overlay.css"]
     }
   ]
 }
+
