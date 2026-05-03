@@ -14,7 +14,7 @@
   "content_scripts": [
     {
       "matches": [
-        "*://www.youtube.com/shorts/*",
+        "*://www.youtube.com/*",
         "*://www.facebook.com/marketplace/*"
       ],
       "js": ["content.js"]

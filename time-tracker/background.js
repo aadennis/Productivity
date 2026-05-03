@@ -3,7 +3,7 @@ let lastTimestamp = Date.now();
 
 function categoryFromUrl(url) {
   if (!url) return null;
-  if (url.includes("youtube.com/shorts/")) return "yt_shorts";
+  if (url.includes("youtube.com/shorts")) return "yt_shorts";
   if (url.includes("facebook.com/marketplace")) return "fb_marketplace";
   return null;
 }
